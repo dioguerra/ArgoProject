@@ -3,22 +3,21 @@ argo-cd:
     install: true
 
   configs:
+    # clusterCredentials:
+    # - name: awscluster
+    #   server: https://some-aws-server.amazon.com
+    #   labels: {}
+    #   annotations: {}
+    #   config:
+    #     bearerToken: "<authentication token>"
+    #     tlsClientConfig:
+    #       insecure: false
+    #       caData: "<base64 encoded certificate>"
     repositories:
       testing-registry:
         url: https://github.com/dioguerra/ArgoProject.git
         type: git
         name: ArgoProject
-
-  # clusterCredentials:
-  # - name: localcluster
-  #   server: https://localhost
-  #   labels: {}
-  #   annotations: {}
-  #   config:
-  #     bearerToken: "<authentication token>"
-  #     tlsClientConfig:
-  #       insecure: false
-  #       caData: "<base64 encoded certificate>"
 
   reposerver:
     extraContainers:

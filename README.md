@@ -53,7 +53,10 @@ Alternatively run the following command:
 ./argoocd.yaml
 ```
 
-### TODO
-* Make argocd manage iitself (update docs too)
-  * This will allow to add clusters programatically using argocd/values.yaml ClusterCredentials
-  * extra cluster installations for workflows (in this case) will be added to services/argo-workflows.yaml `spec.generators[].list.elements[]`
+### Extend applications to other clusters
+To launch the argo-workflows application on other clusters in the cloud,
+the following steps must be done:
+* Add the cluster configuration parameters to the tracked clusters
+in the `argocd/values.yaml` file under `clusterCredentials`.
+* Add the cluster name used in the added cluster above to the
+`services/argo-workflows.yaml` generators list, just below `- cluster: in-cluster`
