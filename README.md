@@ -63,3 +63,9 @@ in the `argocd/values.yaml` file under `clusterCredentials`.
 
 > **_NOTE:_**  Please note that sensitive information should not be added to the
 repository itself and instead a secret provider should be used (like Hashicorp/Vault).
+
+### Other Thoughs
+I am not sure It was intended to add a way for me to deploy a cluster in
+a cloud provider, but if this is the intention we would use OpenTofu for this purpose
+Documentation is provided [upstream](https://developer.hashicorp.com/terraform/tutorials/kubernetes) on how this can be done.
+In this case I assume that target cluster access is provided.
