@@ -60,3 +60,6 @@ the following steps must be done:
 in the `argocd/values.yaml` file under `clusterCredentials`.
 * Add the cluster name used in the added cluster above to the
 `services/argo-workflows.yaml` generators list, just below `- cluster: in-cluster`
+
+> **_NOTE:_**  Please note that sensitive information should not be added to the
+repository itself and instead a secret provider should be used (like Hashicorp/Vault).
