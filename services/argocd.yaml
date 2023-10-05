@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: kops-argocd
+  name: argocd
   namespace: argocd
 spec:
   generators:
@@ -10,7 +10,7 @@ spec:
       - cluster: in-cluster
   template:
     metadata:
-      name: kops-argocd
+      name: argocd
     spec:
       project: default
       source:
