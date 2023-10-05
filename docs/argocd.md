@@ -41,4 +41,5 @@ echo "Password: $(kubectl -n argocd get secret argocd-initial-admin-secret -ojso
 
 > **_NOTE:_**  For the purposes of this tutorial we will not setup users
 and will instead use the admin account. Ideally a system backed by a
-centralized authentication server should be use for ease of management, integration and maintenance.
+centralized authentication server should be use for ease of management,
+integration, maintenance and most importantly security.
