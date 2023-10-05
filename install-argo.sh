@@ -1,13 +1,18 @@
 #!/bin/bash
 
 # Deploy Argo application
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+cd argocd
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update argo
 
-# Download and install argocli
-curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
-rm argocd-linux-amd64
+kubectl create ns argocd
+helm --namespace argocd template -f values.yaml "argocd" . \
+        | yq e 'select(.kind == "CustomResourceDefinition")' - \
+        > generated.yaml
+kubectl apply -f generated.yaml -n argocd && rm generated.yaml
+helm template argocd . -n argocd --values values.yaml --version 5.46.7 | kubectl apply -f -
+
+sleep(30)
 
 # Expose Argocd application to local browser
 kubectl port-forward svc/argocd-server -n argocd 8080:443 &

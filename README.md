@@ -1,14 +1,21 @@
 ## Welcome to this ArgoCD deployer demo application
+Executing scripts indicated in this tutorial will require you to have them
+available to you. Download this repo to your local computer:
+```
+cd /tmp
+git clone https://github.com/dioguerra/ArgoProject.git
+cd ArgoProject
+```
 
 ## Roadmap
-  * Install required applications
+  * Install dependencies
   * Install/configure kubernetes cluster to use as bootstrap environment
   * Launch application controller and main application tracker
   * Profit
 
 ### Requisites
 This guide assumes that you currently have installed in your system kubectl.
-If not, unstall it following the upstream [documentation](https://kubernetes.io/docs/tasks/tools/) or the command below:
+If not, install it following the upstream [documentation](https://kubernetes.io/docs/tasks/tools/) or the command below:
 ```bash
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
@@ -18,6 +25,16 @@ rm kubectl
 Validate the application is installed with:
 ```bash
 kubectl version --client
+```
+
+We will also use helm to generate the kubernetes manifests. Check the upstream
+[documentation](https://helm.sh/docs/intro/install/) or follow the command below:
+```bash
+HELM_LATEST=$(curl -s https://github.com/helm/helm/releases | grep "Download Helm" | grep -oE "v[0-9]+\.[0-9]+\.[0-9]+\." | head -n1 | rev | cut -c2- | rev)
+curl https://get.helm.sh/helm-${HELM_LATEST}-linux-amd64.tar.gz -o helm-latest.tar.gz
+tar zxvf helm-latest.tar.gz
+sudo install -o root -g root -m 0755 linux-amd64/helm /usr/local/bin/helm
+rm -rf helm-latest.tar.gz linux-amd64
 ```
 
 You will require a bootstraping kubernetes cluster. Create one by following the 
@@ -30,9 +47,11 @@ Alternatibely you can run the command:
 ### Run Application Controller
 We will use ArgoCD as our application(s) controller. After validating that the
 cluster is up and running `kubectl get po -A`, launch and install ArgoCD and
-it's apps. Follow the documentation provided in this repo under [docs/argocd.md](https://github.com/dioguerra/ArgoProject/blob/main/docs/argocd.md)
-
-
+it's apps. Follow the documentation provided in this repo under [docs/argocd.md](https://github.com/dioguerra/ArgoProject/blob/main/docs/argocd.md).
+Alternatively run the following command:
+```bash
+./argoocd.yaml
+```
 
 ### TODO
 * Make argocd manage iitself (update docs too)

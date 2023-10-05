@@ -42,4 +42,3 @@ argo-cd:
         name: tmp
       - mountPath: /.cache/helm/repository
         name: helm-cache
-

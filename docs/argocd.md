@@ -15,15 +15,6 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
-We will also be needing argocd client so we can interact with argocd.
-Install this following the [documentation](https://argo-cd.readthedocs.io/en/stable/cli_installation/) upstream or by running the commands bellow:
-
-```bash
-curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
-rm argocd-linux-amd64
-```
-
 ### Interacting with Argo using the browser
 
 You can interact with your Argo deployment via browser by running the command bellow.
@@ -34,34 +25,28 @@ echo "User: admin"
 echo "Password: $(kubectl -n argocd get secret argocd-initial-admin-secret -ojsonpath='{.data.password}' | base64 -d)"
 ```
 
-> **_NOTE:_**  For the porposes of this tutorial we will not setup users
+> **_NOTE:_**  For the purposes of this tutorial we will not setup users
 and will instead use the admin account. Ideally a system backed by a
 centralized authentication server should be use for ease of management, integration and maintenance.
 
-## Setting up our application:
+## Deploying our applications controller:
 
 Our application(s) should be setup in the services folder where argocd
-will keep track of the current state defined for the application.
-As such, any new releases we wich to make should be pushed to the git
+will keep track of the current state defined for the various tracked applications.
+As such, any new releases we wish to make should be pushed to the git
 repository that we are tracking (https://github.com/dioguerra/ArgoProject)
 
-Deploy the controller application by running:
+Deploy the controller to bootstrap the application controller:
 
-```
-kubectl apply -f main.yaml -n argocd
-```
-
-In the last step, you need to add the repository to the tracked argocd repositoies.
-Do this by accessing `https://localhost:8080` and then navigating into
-```
-Settings -> Repositories -> Connect Repo
-
-Connection method: Via https
-Name: ArgoProject
-Project: default
-Repository URL: https://github.com/dioguerra/ArgoProject.git
-```
-
-<!-- helm repo add argo https://argoproj.github.io/argo-helm
+```bash
+cd argocd
+helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update argo
-helm install argocd argo/argo-cd -n argocd --version 5.46.7 -->
+
+kubectl create ns argocd
+helm --namespace argocd template -f values.yaml "argocd" . \
+        | yq e 'select(.kind == "CustomResourceDefinition")' - \
+        > generated.yaml
+kubectl apply -f generated.yaml -n argocd && rm generated.yaml
+helm template argocd . -n argocd --values values.yaml --version 5.46.7 | kubectl apply -f -
+```
