@@ -17,6 +17,29 @@ argo-cd:
   #       insecure: false
   #       caData: "<base64 encoded certificate>"
 
+  reposerver:
+    extraContainers:
+    - image: alpine/helm:3.11.1
+      imagePullPolicy: Always
+      name: avp-helm
+      command:
+      - /var/run/argocd/argocd-cmp-server
+      securityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        runAsUser: 999
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/argocd
+        name: var-files
+      - mountPath: /home/argocd/cmp-server/plugins
+        name: plugins
+      - mountPath: /tmp
+        name: tmp
+      - mountPath: /.cache/helm/repository
+        name: helm-cache
+
   repositories:
     testing-registry:
       url: https://github.com/dioguerra/ArgoProject.git

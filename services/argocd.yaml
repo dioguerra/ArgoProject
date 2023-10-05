@@ -17,7 +17,6 @@ spec:
         repoURL: https://github.com/dioguerra/ArgoProject.git
         targetRevision: main
         path: argocd
-        plugin: {}
       destination:
         name: '{{cluster}}'
         namespace: argocd
