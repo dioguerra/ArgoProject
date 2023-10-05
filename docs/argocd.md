@@ -42,6 +42,7 @@ Deploy the controller to bootstrap the application controller:
 cd argocd
 helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update argo
+helm dependency update
 
 kubectl create ns argocd
 helm --namespace argocd template -f values.yaml "argocd" . \
