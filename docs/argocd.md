@@ -51,14 +51,17 @@ Deploy the controller application by running:
 kubectl apply -f main.yaml -n argocd
 ```
 
-<!-- We will also need to add our cluster to the argocd controller.
-Do this by running:
-```bash
-argocd cluster add minikube -y
-``` -->
+In the last step, you need to add the repository to the tracked argocd repositoies.
+Do this by accessing `https://localhost:8080` and then navigating into
+```
+Settings -> Repositories -> Connect Repo
 
+Connection method: Via https
+Name: ArgoProject
+Project: default
+Repository URL: https://github.com/dioguerra/ArgoProject.git
+```
 
-
-helm repo add argo https://argoproj.github.io/argo-helm
+<!-- helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update argo
-helm install argocd argo/argo-cd -n argocd --version 5.46.7
+helm install argocd argo/argo-cd -n argocd --version 5.46.7 -->
