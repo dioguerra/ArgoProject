@@ -16,6 +16,3 @@ spec:
     automated:
       prune: true
       allowEmpty: true
-
-
-### NEED TO ADD REPO IF WE ONLY DO THIS
