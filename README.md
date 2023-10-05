@@ -37,6 +37,13 @@ sudo install -o root -g root -m 0755 linux-amd64/helm /usr/local/bin/helm
 rm -rf helm-latest.tar.gz linux-amd64
 ```
 
+Finally, let's install yq, an utility to interact with yaml files. Installation can be found
+[upstream](https://mikefarah.gitbook.io/yq/v/v3.x/). Alternatively, command is provided below
+```bash
+snap install yq --channel=v3/stable
+```
+
+### Launch bootstraping cluster
 You will require a bootstraping kubernetes cluster. Create one by following the 
 minikube [documentation](https://github.com/dioguerra/ArgoProject/blob/main/docs/minikube.md) provided in this repo.
 Alternatibely you can run the command:
