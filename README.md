@@ -50,7 +50,7 @@ cluster is up and running `kubectl get po -A`, launch and install ArgoCD and
 it's apps. Follow the documentation provided in this repo under [docs/argocd.md](https://github.com/dioguerra/ArgoProject/blob/main/docs/argocd.md).
 Alternatively run the following command:
 ```bash
-./argoocd.yaml
+./install-argo.sh
 ```
 
 ### Extend applications to other clusters

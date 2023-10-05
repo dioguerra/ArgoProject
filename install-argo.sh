@@ -7,9 +7,13 @@ helm repo update argo
 helm dependency update
 
 kubectl create ns argocd
+helm --namespace argocd template -f values.yaml "argocd" . \
+        | yq e 'select(.kind == "CustomResourceDefinition")' - \
+        > generated.yaml
+kubectl apply -f generated.yaml -n argocd && rm generated.yaml
 helm template argocd . -n argocd --values values.yaml --version 5.46.7 | kubectl apply -f -
 
-sleep(30)
+sleep 60
 
 # Expose Argocd application to local browser
 kubectl port-forward svc/argocd-server -n argocd 8080:443 &

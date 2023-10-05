@@ -44,5 +44,9 @@ helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update argo
 
 kubectl create ns argocd
+helm --namespace argocd template -f values.yaml "argocd" . \
+        | yq e 'select(.kind == "CustomResourceDefinition")' - \
+        > generated.yaml
+kubectl apply -f generated.yaml -n argocd && rm generated.yaml
 helm template argocd . -n argocd --values values.yaml --version 5.46.7 | kubectl apply -f -
 ```
