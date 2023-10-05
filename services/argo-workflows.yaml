@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kops-workflows
+  namespace: argo-workflows
+spec:
+  generators:
+  - list:
+      elements:
+      - cluster: in-cluster
+  template:
+    metadata:
+      name: kops-workflows
+    spec:
+      project: default
+      source:
+        chart: argo-workflows
+        repoURL: https://argoproj.github.io/argo-helm
+        targetRevision: 0.33.3
+        helm:
+          releaseName: argo-workflows
+      destination:
+        name: '{{cluster}}'
+        namespace: argo-workflows
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
