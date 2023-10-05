@@ -1,0 +1,18 @@
+argo-cd:
+  crds:
+    install: true
+
+  configs:
+    params:
+      server.insecure: true
+
+  clusterCredentials:
+  - name: localcluster
+    server: https://localhost
+    labels: {}
+    annotations: {}
+    config:
+      bearerToken: "<authentication token>"
+      tlsClientConfig:
+        insecure: false
+        caData: "<base64 encoded certificate>"

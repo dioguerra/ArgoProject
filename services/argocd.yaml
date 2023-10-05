@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kops-argocd
+  namespace: argocd
+spec:
+  generators:
+  - list:
+      elements:
+      - cluster: in-cluser
+  template:
+    metadata:
+      name: kops-argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/dioguerra/ArgoProject.git
+        targetRevision: master
+        path: argocd
+        plugin: {}
+      destination:
+        name: '{{cluster}}'
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
