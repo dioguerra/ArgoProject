@@ -11,9 +11,23 @@ With access to a control cluster (in this case the local minikube cluster)
 created previously. Let's deploy our argo controller application:
 
 ```bash
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+cd argocd
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update argo
+helm dependency update
+
+kubectl create ns argocd
+helm --namespace argocd template -f values.yaml "argocd" . \
+        | yq e 'select(.kind == "CustomResourceDefinition")' - \
+        > generated.yaml
+kubectl apply -f generated.yaml -n argocd && rm generated.yaml
+helm template argocd . -n argocd --values values.yaml --version 5.46.7 | kubectl apply -f -
 ```
+
+Our application(s) should be setup in the services folder where argocd
+will keep track of the current state defined for the various tracked applications.
+As such, any new releases we wish to make should be pushed to the git
+repository that we are tracking (https://github.com/dioguerra/ArgoProject)
 
 ### Interacting with Argo using the browser
 
@@ -28,26 +42,3 @@ echo "Password: $(kubectl -n argocd get secret argocd-initial-admin-secret -ojso
 > **_NOTE:_**  For the purposes of this tutorial we will not setup users
 and will instead use the admin account. Ideally a system backed by a
 centralized authentication server should be use for ease of management, integration and maintenance.
-
-## Deploying our applications controller:
-
-Our application(s) should be setup in the services folder where argocd
-will keep track of the current state defined for the various tracked applications.
-As such, any new releases we wish to make should be pushed to the git
-repository that we are tracking (https://github.com/dioguerra/ArgoProject)
-
-Deploy the controller to bootstrap the application controller:
-
-```bash
-cd argocd
-helm repo add argo https://argoproj.github.io/argo-helm
-helm repo update argo
-helm dependency update
-
-kubectl create ns argocd
-helm --namespace argocd template -f values.yaml "argocd" . \
-        | yq e 'select(.kind == "CustomResourceDefinition")' - \
-        > generated.yaml
-kubectl apply -f generated.yaml -n argocd && rm generated.yaml
-helm template argocd . -n argocd --values values.yaml --version 5.46.7 | kubectl apply -f -
-```
